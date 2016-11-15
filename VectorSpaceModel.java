@@ -49,6 +49,20 @@ public class VectorSpaceModel {
 	         }
 	        }
 	   }
+	
+	int numberOfwordOccurance(List<String> s1,String word)//ni//
+	{
+	    int count=0;
+	    for(String w:s1)
+	    {
+	        if(w.contains(word))
+	            count++;
+	    }
+	    return count;
+	}
+
+
+	}
 	           
 	   
 	
