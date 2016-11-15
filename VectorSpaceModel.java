@@ -10,13 +10,13 @@ import java.io.InputStreamReader;
 import java.io.*;
 import java.math.*;
 
-public class VectorSpace {
+public class VectorSpaceModel {
 
 	   public static void main(String args[])throws IOException {
 	      HashMap<String, List<String>> hmap = new HashMap<String, List<String>>();
 	      HashMap<String, List<String>> hash = new HashMap<String, List<String>>();
 	      
-	      VectorSpace t =new VectorSpace();
+	      VectorSpaceModel t =new VectorSpaceModel();
 	      
 		  try (BufferedReader br = new BufferedReader(new FileReader("dataset.txt"))) 
 	          {
