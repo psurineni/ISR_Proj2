@@ -1,68 +1,71 @@
-import java.awt.BorderLayout;
-import java.util.HashMap;
-import java.util.*;
-import java.util.Iterator;
-import java.util.Set;
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.*;
-import java.math.*;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class VectorSpaceModel {
-
-	   public static void main(String args[])throws IOException {
-	      HashMap<String, List<String>> hmap = new HashMap<String, List<String>>();
-	      HashMap<String, List<String>> hash = new HashMap<String, List<String>>();
-	      
-	      VectorSpaceModel t =new VectorSpaceModel();
-	      
-		  try (BufferedReader br = new BufferedReader(new FileReader("dataset.txt"))) 
-	          {
-	            String line;
-		    String[] temp;
-	            while((line = br.readLine()) != null) {
-	                List<String> list = new ArrayList<String>();
-	                temp=line.split("\\s+",2);
-	                if (temp.length > 1)
-	                {
-	                     if ( hmap.containsKey(temp[0]))
-	                     {
-	                        list = hmap.get(temp[0]);
-	                     }
-	                     list.add(temp[1]);
-	                  hmap.put(temp[0],list);
-	                }
-	            }
-	         }
-		  try (BufferedReader br = new BufferedReader(new FileReader("input.txt"))) 
-	          {
-	            String line;
-		       String[] temp1;
-	            while((line = br.readLine()) != null) {
-	                List<String> list = new ArrayList<String>();
-	                temp1=line.split(",");
-	                }
-			  catch(Exception e){
-	              System.out.println(e);
-	         }
-	        }
-	   }
+	public static Map<String,String> documents = new HashMap<String,String>();
+	public static void main(String[] args) {
+		try {
+			BufferedReader fileReader = new BufferedReader(new FileReader("Dataset.txt"));
+			String record;
+			
+			
+			while((record = fileReader.readLine())!=null){
+				String[] tempArray = record.split("\\s+", 2);
+				String NG = tempArray[0];
+				String recordString = null;
+				if (tempArray.length > 1) {
+					recordString = tempArray[1];
+				}
+				String r = null;
+				if (documents.containsKey(NG)) {
+					r = documents.get(NG);
+				}
+				r = r + " " + recordString; 
+				documents.put(NG, r);	
+			}
+			String[] query = new String[Integer.parseInt(args[0])];
+			for(int i=1; i<Integer.parseInt(args[0]); i++) {
+				System.out.println(args[i]);
+				query[i-1] = args[i];
+			}
+			
+			Set<String> docRecord = documents.keySet();
+			for (String doc : docRecord) {
+			   rankingofDocument(documents.get(doc),query);
+			}	
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
-	int numberOfwordOccurance(List<String> s1,String word)//ni//
-	{
-	    int count=0;
-	    for(String w:s1)
-	    {
-	        if(w.contains(word))
-	            count++;
-	    }
-	    return count;
+	void rankingofDocument(String record, String[]query){
+		Map<String,Integer> documentVector = new HashMap<String,Integer>();
+		Map<String,Integer> documentVector1 = new HashMap<String,Integer>();
+		 String[] words = record.split("\\s+");
+		 for (String word : words) {
+			 int frequency = 0;
+			 if(documentVector.get(word)!=null){
+				 frequency = documentVector.get(word);
+			 }
+			 documentVector.put(word, frequency);
+		 }
+			Set<String> docRecord = documentVector.keySet();
+			for (String word : docRecord) {
+				double secondTerm = calsecondTerm(word);
+				double weight = documentVector.get(word) * secondTerm
+				documentVector1.put(word,weight);
+			}
+		 
 	}
 
-
-	}
+}
 	           
 	   
 	
