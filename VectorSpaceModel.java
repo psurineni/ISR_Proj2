@@ -123,3 +123,43 @@ public class VectorSpaceModel {
 		 System.out.println("Ranking of the document"+ calVecotrMutliplication(documentVector1,queryVector1));
 		 
 	}
+	double calVecotrMutliplication(Map<String,Double> documentVector, Map<String,Double> queryVector){
+		double denominator = calculateDenominator(documentVector)* calculateDenominator(queryVector);
+		double numerator =0;
+		Set<String> queryTerms = queryVector.keySet();
+		for (String term : queryTerms){
+			if(documentVector.containsKey(term)){
+				numerator += documentVector.get(term)*queryVector.get(term);
+			}
+		}
+		if (denominator == 0){
+			return 0.0;
+		}
+		return( numerator/denominator);
+	}
+	
+	double calculateDenominator(Map<String,Double> vector){
+		double sum = 0;
+		Set<String> terms = vector.keySet();
+		for (String term : terms){
+			sum += vector.get(term)*vector.get(term);
+		}
+		return Math.sqrt(sum);
+		
+	}
+	double calsecondTerm(String word){
+		double secondTerm = 0;
+		double N = 20;
+		double n = 0;
+		Set<String> docRecord = documents.keySet();
+		for (String doc : docRecord) {
+		      String record = documents.get(doc);
+		      if(record.contains(word))
+		    	  n = n+1;
+		}
+		secondTerm = Math.log(N/n)/Math.log(2);
+		return secondTerm;
+	}
+
+}
+
