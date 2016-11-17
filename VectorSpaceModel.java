@@ -9,16 +9,16 @@ import java.util.Set;
 public class VectorSpaceModel {
 	public static Map<String,String> documents = new HashMap<String,String>();
 	public static void main(String[] args) {
-		Project pr = new Project();
+		VectorSpaceModel pr = new VectorSpaceModel();
 		try {
-			BufferedReader fileReader = new BufferedReader(new FileReader("Dataset.txt"));
+			BufferedReader fileReader = new BufferedReader(new FileReader("C:\\Users\\Manideep\\Documents\\NetBeansProjects\\VectorSpaceModel\\src\\vectorspacemodel\\dataset.txt"));
 			String record;
 			
 			
 			while((record = fileReader.readLine())!=null){
 				String[] tempArray = record.split("\\s+", 2);
 				String NG = tempArray[0];
-				System.out.println(tempArray[1]);
+				//System.out.println(tempArray[1]);
 				String recordString = null;
 				if (tempArray.length > 1) {
 					recordString = tempArray[1];
@@ -34,9 +34,9 @@ public class VectorSpaceModel {
 			String[] query = new String[args.length];
 			query = args;
 			Set<String> docRecord = documents.keySet();
-			System.out.println(docRecord);
+			//System.out.println(docRecord);
 			for (String doc : docRecord) {
-			   pr.rankingofDocument(documents.get(doc),query);
+			   pr.rankingofDocument(doc,documents.get(doc),query);
 			}	
 			
 		} catch (Exception e) {
@@ -45,8 +45,8 @@ public class VectorSpaceModel {
 		}
 	}
 	
-	void rankingofDocument(String record, String[]query){
-		System.out.println(record);
+	void rankingofDocument(String docName,String record, String[]query){
+	//	System.out.println(record);
 		Map<String,Integer> documentVector = new HashMap<String,Integer>();
 		Map<String,Integer> queryVector = new HashMap<String,Integer>();
 		Map<String,Double> documentVector1 = new HashMap<String,Double>();
@@ -119,10 +119,18 @@ public class VectorSpaceModel {
 					double weight = (1 + Math.log(queryVector.get(word))/Math.log(2)) * secondTerm;
 					queryVector3.put(word,weight);
 				}
-			 
-		 System.out.println("Ranking of the document"+ calVecotrMutliplication(documentVector1,queryVector1));
+		System.out.println("Input Query");
+                for(String term:query){
+                    System.out.print(term+" ");
+                }
+                System.out.println();
+                
+		 System.out.println("Ranking of the document using weighing schema1 "+docName+" "+ calVecotrMutliplication(documentVector1,queryVector1));
+                 System.out.println("Ranking of the document using weighing schema2 "+docName+" "+ calVecotrMutliplication(documentVector2,queryVector2));
+                 System.out.println("Ranking of the document using weighing schema3 "+docName+" "+ calVecotrMutliplication(documentVector3,queryVector3));
 		 
 	}
+	
 	double calVecotrMutliplication(Map<String,Double> documentVector, Map<String,Double> queryVector){
 		double denominator = calculateDenominator(documentVector)* calculateDenominator(queryVector);
 		double numerator =0;
@@ -162,4 +170,3 @@ public class VectorSpaceModel {
 	}
 
 }
-
